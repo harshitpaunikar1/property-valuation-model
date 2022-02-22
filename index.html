@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Committee Memo: Property Valuation Model</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* 
+      DESIGN SYSTEM: "Investment Memo"
+      Black and white only. Typography-driven.
+      Compressed header, ruled tables, diligence note h2s.
+    */
+    :root {
+      --bg: #ffffff;
+      --text-main: #111111;
+      --text-muted: #555555;
+      --border-heavy: #111111;
+      --border-light: #cccccc;
+      --border-faint: #e8e8e8;
+      --f-sans: 'Roboto', sans-serif;
+      --f-mono: 'Roboto Mono', monospace;
+      --code-bg: #111111;
+      --code-text: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--f-sans);
+      font-size: 11pt; /* Print-like sizing */
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    /* Memo Header Structure */
+    .memo-container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .memo-header {
+      border-bottom: 3px solid var(--border-heavy);
+      padding-bottom: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .memo-header h1 {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .memo-metadata {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      row-gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .memo-label {
+      font-family: var(--f-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Diligence H2s */
+    h2 {
+      font-family: var(--f-mono);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 3.5rem;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-heavy);
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    h2::before {
+      content: "■";
+      font-size: 0.8rem;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Body text */
+    p {
+      margin-bottom: 1.25rem;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-bottom: 1.5rem;
+      margin-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-light);
+      text-align: left;
+    }
+
+    th {
+      font-family: var(--f-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-heavy);
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    td.num {
+      text-align: right;
+      font-family: var(--f-mono);
+    }
+
+    /* SVG Graphics */
+    .figure-block {
+      margin: 3rem 0;
+      border: 1px solid var(--border-light);
+      padding: 2rem;
+      background: var(--bg);
+    }
+
+    .figure-block svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .figcaption {
+      font-family: var(--f-sans);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+      font-style: italic;
+      border-left: 2px solid var(--border-heavy);
+      padding-left: 1rem;
+    }
+
+    /* Code Snippets */
+    pre {
+      background-color: var(--code-bg);
+      color: var(--code-text);
+      font-family: var(--f-mono);
+      font-size: 0.85rem;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: var(--f-mono);
+    }
+
+    .comment { color: #888888; }
+    .keyword { color: #ffffff; font-weight: bold; }
+
+    /* Sensitivity Grid Layout */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      .memo-metadata {
+        grid-template-columns: 1fr;
+        row-gap: 0.25rem;
+      }
+      .memo-label {
+        margin-top: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="memo-container">
+  
+  <div class="memo-header">
+    <h1>Investment Committee Memorandum</h1>
+    <div class="memo-metadata">
+      <div class="memo-label">To:</div>
+      <div>Investment Committee (IC)</div>
+      
+      <div class="memo-label">From:</div>
+      <div>Quantitative Valuations Group</div>
+      
+      <div class="memo-label">Date:</div>
+      <div>April 26, 2026</div>
+      
+      <div class="memo-label">Subject:</div>
+      <div><strong>Property Investment Model: Scenario Analysis & IRR Sensitivity</strong></div>
+    </div>
+  </div>
+
+  <p>This memorandum presents the underlying logic, assumptions, and scenario sensitivities for the proposed property investment model. The intent is to transition our acquisition dialogue away from abstract machine-learning accuracy claims (e.g., $R^2$ scores) toward a disciplined, hard-nosed evaluation of absolute cashflow and downside risk. Properties are not valuable because a regression model says they are; they are valuable because of the cash they generate and the capital they protect. Our data models must be subordinated to this reality.</p>
+
+  <h2>1. The Opportunity and The Underwriting Baseline</h2>
+
+  <p>The proposed quantitative model ingests standard housing features (square footage, locality indices, structural age) to output an expected market acquisition price. While the algorithmic prediction component is sound (verifying against a historical baseline with an $R^2$ of 0.87), treating the predicted price as the sole decision criteria invites disaster. A high-accuracy model merely tells us what the market *is* paying. It does not tell us whether the market is *right*, nor does it confirm if the yield justifies the capital outlay.</p>
+
+  <p>We are underwriting this acquisition model against the following baseline assumptions over a standard 5-year hold period:</p>
+
+  <ul>
+    <li><strong>Capital Outlay:</strong> Expected model prediction = $100 \%$ acquisition cost.</li>
+    <li><strong>LTV (Loan-to-Value):</strong> $65\%$, amortized over 25 years at a fixed debt cost of $6.5\%$.</li>
+    <li><strong>Terminal Capitalization Rate:</strong> $5.50\%$, reflecting a conservative exit penalty.</li>
+    <li><strong>Vacancy & Credit Loss:</strong> $5.0\%$ of Gross Potential Rent (GPR) annually.</li>
+    <li><strong>Operating Expenses (OpEx):</strong> Modeled at $35\%$ of Effective Gross Income (EGI).</li>
+  </ul>
+
+  <h2>2. The Cashflow Ladder Logic</h2>
+
+  <p>To justify a purchase decision, the predicted price from the model must feed directly into the cashflow ladder. The cashflow ladder is the mechanism that proves whether the price demanded by the seller transforms into an acceptable yield or destroys equity. The diagram below illustrates how top-line rental income is brutally stripped down to Levered Free Cash Flow.</p>
+
+  <div class="figure-block">
+    <svg viewBox="0 0 800 280" preserveAspectRatio="xMidYMid meet">
+      <!-- Steps / Bars -->
+      <rect x="50" y="40" width="100" height="200" fill="#111" />
+      <rect x="180" y="80" width="100" height="160" fill="#555" />
+      <rect x="310" y="110" width="100" height="130" fill="#888" />
+      <rect x="440" y="150" width="100" height="90" fill="#aaa" />
+      <rect x="570" y="200" width="100" height="40" fill="#ccc" />
+      
+      <!-- Connectors -->
+      <path d="M 150 80 L 180 80" stroke="#111" stroke-dasharray="2" fill="none" />
+      <path d="M 280 110 L 310 110" stroke="#555" stroke-dasharray="2" fill="none" />
+      <path d="M 410 150 L 440 150" stroke="#888" stroke-dasharray="2" fill="none" />
+      <path d="M 540 200 L 570 200" stroke="#aaa" stroke-dasharray="2" fill="none" />
+
+      <!-- Labels Top -->
+      <text x="100" y="30" font-family="Roboto Mono" font-size="10" font-weight="600" text-anchor="middle">GROSS RENT (GPR)</text>
+      <text x="230" y="70" font-family="Roboto Mono" font-size="10" text-anchor="middle">- VACANCY</text>
+      <text x="360" y="100" font-family="Roboto Mono" font-size="10" text-anchor="middle">- OPEX</text>
+      <text x="490" y="140" font-family="Roboto Mono" font-size="10" font-weight="600" text-anchor="middle">NOI</text>
+      <text x="620" y="190" font-family="Roboto Mono" font-size="10" text-anchor="middle">- DEBT SERVICE</text>
+
+      <!-- Labels Bottom inside/below bar -->
+      <text x="100" y="260" font-family="Roboto" font-size="10" fill="#555" text-anchor="middle">Potential Max</text>
+      <text x="230" y="260" font-family="Roboto" font-size="10" fill="#555" text-anchor="middle">Effective Gross</text>
+      <text x="490" y="260" font-family="Roboto" font-size="10" fill="#555" text-anchor="middle">Net Operating Inc.</text>
+      <text x="620" y="260" font-family="Roboto" font-size="10" font-weight="700" fill="#111" text-anchor="middle">LEVERED CF</text>
+    </svg>
+    <div class="figcaption">
+      The Cashflow Ladder. The predictive model only prices the asset; the ladder prices the operation. If Net Operating Income (NOI) cannot safely clear the debt service coverage threshold following conservative vacancy and OpEx assumptions, the model's acquisition price recommendation must be overridden and rejected.
+    </div>
+  </div>
+
+  <h2>3. Return Metrics from First Principles: Internal Rate of Return (IRR)</h2>
+
+  <p>The IC requires a minimum Levered IRR of $15.0\%$ to approve an acquisition. The IRR is not a static number—it is the discount rate that drops the Net Present Value (NPV) of all future cash flows down to exactly zero. It acts as our hurdle rate. If the IRR exceeds our cost of capital, wealth is created. If it falls short, we are destroying equity.</p>
+
+  <p>Our model programmatically extracts the predicted acquisition cost and runs it against a simulated 5-year operating ledger. The terminal value relies entirely on the assumed exit Cap Rate, making the calculation intensely sensitive to timing and market exit conditions.</p>
+
+<pre><code><span class="comment"># IRR Calculation Engine: Tying the predictive model to the cashflow model</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> calculate_irr(predicted_price, down_payment_pct, yr1_noi, growth_rate, exit_cap):
+    <span class="comment"># Initial equity outflow</span>
+    equity_outlay = -(predicted_price * down_payment_pct)
+    
+    <span class="comment"># Operational cash flows (Years 1 to 5)</span>
+    cash_flows = [equity_outlay]
+    noi = yr1_noi
+    <span class="keyword">for</span> year <span class="keyword">in</span> range(5):
+        <span class="comment"># Simplified: Assuming interest-only debt service for clarity here</span>
+        debt_service = (predicted_price * (1 - down_payment_pct)) * 0.065
+        levered_cf = noi - debt_service
+        cash_flows.append(levered_cf)
+        noi *= (1 + growth_rate)
+        
+    <span class="comment"># Terminal Value in Year 5 (NOI / Exit Cap Rate) - Debt Payoff</span>
+    terminal_value = (noi / exit_cap) - (predicted_price * (1 - down_payment_pct))
+    cash_flows[-1] += terminal_value
+    
+    <span class="comment"># Yield the IRR</span>
+    <span class="keyword">return</span> np.irr(cash_flows) * 100
+</code></pre>
+
+  <h2>4. Scenario Analysis and Sensitivity Pressure</h2>
+
+  <p>A deterministic prediction is worthless in an environment defined by volatility. The primary risk to this business model is not that the algorithm incorrectly predicts today's price by $2\%$. The risk is that macroeconomic headwinds compress rents, spike vacancies, or expand exit Cap Rates, wiping out downside equity.</p>
+
+  <p>We stress-test the model's target price through a two-dimensional sensitivity grid. Because real estate valuations are highly levered, a $5\%$ miss on rental growth compounded over five years can compress the IRR by several hundred basis points.</p>
+
+  <div class="figure-block grid-container">
+    <div>
+      <h3>Cap Rate vs Rent Growth</h3>
+      <svg viewBox="0 0 350 220" preserveAspectRatio="xMidYMid meet">
+        <!-- Axes -->
+        <line x1="50" y1="20" x2="50" y2="180" stroke="#111" stroke-width="2" />
+        <line x1="50" y1="180" x2="320" y2="180" stroke="#111" stroke-width="2" />
+        
+        <!-- Y Labels (Exit Cap) -->
+        <text x="40" y="50" font-family="Roboto Mono" font-size="10" text-anchor="end">4.50%</text>
+        <text x="40" y="110" font-family="Roboto Mono" font-size="10" text-anchor="end">5.50%</text>
+        <text x="40" y="170" font-family="Roboto Mono" font-size="10" text-anchor="end">6.50%</text>
+        <text x="15" y="100" font-family="Roboto Mono" font-size="10" transform="rotate(-90 15 100)" text-anchor="middle">EXIT CAP RATE</text>
+
+        <!-- X Labels (Rent Growth) -->
+        <text x="110" y="200" font-family="Roboto Mono" font-size="10" text-anchor="middle">1.0%</text>
+        <text x="190" y="200" font-family="Roboto Mono" font-size="10" text-anchor="middle">3.0%</text>
+        <text x="270" y="200" font-family="Roboto Mono" font-size="10" text-anchor="middle">5.0%</text>
+        <text x="190" y="215" font-family="Roboto Mono" font-size="10" text-anchor="middle">RENT GROWTH (CAGR)</text>
+
+        <!-- Grid Cells (IRR outputs) -->
+        <!-- Row 1 (4.50%) -->
+        <rect x="70" y="30" width="80" height="50" fill="#e8e8e8" />
+        <text x="110" y="60" font-family="Roboto Mono" font-size="12" text-anchor="middle">18.2%</text>
+
+        <rect x="150" y="30" width="80" height="50" fill="#ccc" />
+        <text x="190" y="60" font-family="Roboto Mono" font-size="12" text-anchor="middle">21.5%</text>
+
+        <rect x="230" y="30" width="80" height="50" fill="#888" />
+        <text x="270" y="60" fill="#fff" font-family="Roboto Mono" font-size="12" text-anchor="middle">25.1%</text>
+
+        <!-- Row 2 (5.50%) Base -->
+        <rect x="70" y="80" width="80" height="50" fill="#ffffff" stroke="#e8e8e8"/>
+        <text x="110" y="110" font-family="Roboto Mono" font-size="12" text-anchor="middle">8.4%</text>
+
+        <rect x="150" y="80" width="80" height="50" fill="#e8e8e8" stroke="#111" stroke-width="2"/>
+        <text x="190" y="110" font-family="Roboto Mono" font-size="12" font-weight="700" text-anchor="middle">12.1%</text>
+
+        <rect x="230" y="80" width="80" height="50" fill="#ccc" />
+        <text x="270" y="110" font-family="Roboto Mono" font-size="12" text-anchor="middle">15.8%</text>
+
+        <!-- Row 3 (6.50%) Downside -->
+        <rect x="70" y="130" width="80" height="50" fill="#ffffff" stroke="#ccc"/>
+        <text x="110" y="160" font-family="Roboto Mono" font-size="12" text-anchor="middle">0.2%</text>
+
+        <rect x="150" y="130" width="80" height="50" fill="#ffffff" stroke="#ccc"/>
+        <text x="190" y="160" font-family="Roboto Mono" font-size="12" text-anchor="middle">3.1%</text>
+
+        <rect x="230" y="130" width="80" height="50" fill="#e8e8e8" />
+        <text x="270" y="160" font-family="Roboto Mono" font-size="12" text-anchor="middle">6.5%</text>
+      </svg>
+    </div>
+    
+    <div>
+      <div class="figcaption">
+        <p><strong>Sensitivity Matrix: IRR Outputs.</strong></p>
+        <p>This grid exposes the fragility of the base case. The model's baseline (center square, heavy border) yields only $12.1\%$, missing our target hurdle. If market conditions deteriorate—manifesting as a failure to push rents beyond $1.0\%$ and an exit cap rate expanding to $6.50\%$—the IRR collapses to $0.2\%$, entirely wiping out the margin for error.</p>
+        <p>These mechanics strip away the safety implied by "accurate" ML regressions. If the capital stack is misaligned with operating reality, a highly accurate acquisition price simply guarantees an accurate loss.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>5. Recommendation and Discipline</h2>
+
+  <p>The quantitative model is an input, not an underwriter. We recommend proceeding with acquisitions scored by this model <strong>only if</strong> the asset clears the $15.0\%$ IRR hurdle after the predicted price is subjected to the following downside stress tests:</p>
+
+  <ol>
+    <li>OpEx assumptions are inflated by an additional $15\%$ over historical trendlines to account for inflationary pressures on labor, materials, and insurance.</li>
+    <li>Vacancy rates are stressed to $8.0\%$, simulating cyclical softening.</li>
+    <li>Exit Cap Rate is expanded by $50$ basis points over entry, eliminating the assumption that we can rely on multiple-expansion to engineer returns.</li>
+  </ol>
+
+  <p>If the model’s target acquisition price cannot survive these operational impacts while preserving equity, the asset must be discarded. We are in the business of pricing risk, and any valuation model that treats risk as a static coefficient in a pandas dataframe fundamentally misunderstands the mandate of this firm.</p>
+
+</div>
+
+</body>
+</html>
