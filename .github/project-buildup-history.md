@@ -20,3 +20,7 @@
 
 - Task summary: By this point I had the rough direction, so the work became more practical. I spent most of the day trying to plot the major signals and note which variables matter most and make the whole thing feel less half baked. By now I had enough structure to keep going without staring at the screen too long, which honestly helped a lot. Most of the progress here came from patient cleanup more than anything flashy.
 - Deliverable: I wrapped up the day with eDA summary mostly in place. It was not perfect, but it was good enough to keep the project moving. There were still a couple of loose parts, but nothing serious enough to block the next step.
+## 2022-02-27 - Day 4: EDA
+
+- Task summary: Sunday evening, couldn't leave the failing assert alone. Tracked it down to a missing sort step. Resolved.
+- Deliverable: Wrapped it up properly this time.
