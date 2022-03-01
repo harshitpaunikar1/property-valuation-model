@@ -32,3 +32,7 @@
 
 - Task summary: This was the middle stretch where the project started feeling real. I kept going and tried to train a simple baseline and record its performance, then cleaned up whatever looked confusing or weak from the earlier days. The middle part always takes longer than it should, mostly becuase one fix usually reveals two more things to clean up. I kept bouncing between the notebook, small observations, and quick plots until the direction felt usable.
 - Deliverable: Ended the day with baseline results in hand, plus a few side notes on what still needed fixing later. I also left myself a few rough reminders for the next day so I would not have to rediscover the same context again.
+## 2022-03-01 - Day 6: Baseline model
+
+- Task summary: Got stuck mid-afternoon and had to regroup — cleaned up the cell ordering in the notebook so it reads top to bottom without jumping around.
+- Deliverable: Should've caught it earlier but better now than later.
