@@ -48,3 +48,7 @@
 
 - Task summary: After stepping away for a bit, came back and the output formatting looked messy when printed, so added a cleaner display block.
 - Deliverable: Should've caught it earlier but better now than later.
+## 2022-03-02 - Day 7: Model improvement
+
+- Task summary: Came back after lunch and realized added one more evaluation metric that felt missing from the earlier comparison.
+- Deliverable: Small fix, clean result.
