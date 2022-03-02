@@ -44,3 +44,7 @@
 
 - Task summary: One more pass: fixed the README section that was missing the setup step — embarrassing oversight.
 - Deliverable: Minor but worth doing.
+## 2022-03-02 - Day 7: Model improvement
+
+- Task summary: After stepping away for a bit, came back and the output formatting looked messy when printed, so added a cleaner display block.
+- Deliverable: Should've caught it earlier but better now than later.
