@@ -36,3 +36,7 @@
 
 - Task summary: Got stuck mid-afternoon and had to regroup — cleaned up the cell ordering in the notebook so it reads top to bottom without jumping around.
 - Deliverable: Should've caught it earlier but better now than later.
+## 2022-03-02 - Day 7: Model improvement
+
+- Task summary: This was the middle stretch where the project started feeling real. I kept going and tried to try a stronger model or tune the main parameters, then cleaned up whatever looked confusing or weak from the earlier days. By now I had enough structure to keep going without staring at the screen too long, which honestly helped a lot. Most of the progress here came from patient cleanup more than anything flashy.
+- Deliverable: Ended the day with improved model in hand, plus a few side notes on what still needed fixing later. There were still a couple of loose parts, but nothing serious enough to block the next step.
