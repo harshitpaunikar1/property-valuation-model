@@ -52,3 +52,7 @@
 
 - Task summary: Came back after lunch and realized added one more evaluation metric that felt missing from the earlier comparison.
 - Deliverable: Small fix, clean result.
+## 2022-03-03 - Day 8: Evaluation
+
+- Task summary: Closer to the end, I was mostly tightening things up instead of inventing new scope. The job for the day was to inspect metrics and error cases so the result is believable so the final result looked a bit more complete. I was not trying to add anything fancy here, just making sure the thing looked complete enough to show someone. A lot of this also meant checking if the numbers were making sense and not just trusting the first result that showed up.
+- Deliverable: Ended the day with evaluation notes in hand, plus a few side notes on what still needed fixing later. It was not super polished, just stable enough that I felt okay moving forward.
