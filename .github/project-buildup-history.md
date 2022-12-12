@@ -20,3 +20,7 @@
 
 - Task summary: Comprehensive model evaluation session for Property Valuation today. Ran evaluation across multiple cuts — overall RMSE and MAE, error by property type, error by price band, and geographic error heatmap. The geographic heatmap revealed that errors were higher in one suburb that had undergone significant recent development — the model had no signal for new construction premium. Added a flag for post-2020 build year as a proxy and retested.
 - Deliverable: Evaluation by multiple cuts done. New construction flag added. Error in one suburb reduced.
+## 2022-12-12 - Day 5: Deployment packaging
+
+- Task summary: Packaged the Property Valuation Model for deployment today. Serialized the trained model and the preprocessing pipeline together using joblib so they can be loaded as a single unit. Wrote a small prediction function that takes a raw property dict and returns a price estimate. Also created a minimal test file with three representative examples to verify the serialized model gives consistent predictions after loading.
+- Deliverable: Model and pipeline serialized together. Prediction function written and tested.
